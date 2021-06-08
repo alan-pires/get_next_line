@@ -15,9 +15,9 @@ int	get_next_line(int fd, char **line)
 		return (0);
 	while (read_bytes = read(fd, buf, BUFFER_SIZE) > 0)
 	{
-		if (ft_strchr(buf, '\n'))
+		if (ft_ismatch(buf, '\n'))
 		{
-			*line = ft_strchr(buf, '\n');
+			*line = ft_getline(buf);
 			printf("%s\n",*line);
 			return (1);
 		}
