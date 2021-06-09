@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 10:32:26 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/09 16:29:13 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/09 17:01:32 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-int	get_next_line(int fd, char **line);
-int	ft_ismatch(char*s, int c);
+int		get_next_line(int fd, char **line);
+int		ft_endofline(char*s);
 size_t	ft_strlen(const char *s);
 char	*ft_getline(char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_str_alloc(size_t size);
+char	*ft_strdup(const char *s1);
 
 #	endif

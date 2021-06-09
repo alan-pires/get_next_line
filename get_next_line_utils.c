@@ -39,22 +39,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (p);
 }
 
-char	*ft_str_alloc(size_t size)
-{
-	char	*memory;
-	size_t	i;
-
-	i = 0;
-	memory = malloc(size + 1);
-	if (memory == NULL)
-		return (NULL);
-	while (i < size + 1)
-	{
-		memory[i] = '\0';
-		i++;
-	}
-	return (memory);
-}
 
 char	*ft_strdup(const char *s1)
 {
@@ -90,23 +74,4 @@ char	*ft_strdup(const char *s1)
 		i++;
 	}
 	return (str);
-}
-
-int	ft_ismatch(char*s, int c)
-{
-	size_t	i;
-	size_t	j;
-	char	match;
-
-	i = 0;
-	j = 0;
-	match = (unsigned char)c;
-	while (s[i])
-	{
-		if (s[i] == match)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-*/
+}*/
