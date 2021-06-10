@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 10:32:26 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/10 15:22:11 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/10 16:39:10 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@
 # include <stdlib.h>
 # define BUFFER_SIZE 15
 
-int		ft_get_line(char *str, int size);
-int		ft_endofline(char*s);
+char	*ft_strncat(char *dest, char *src, unsigned int nb);
 size_t	ft_strlen(const char *s);
-char	*ft_getline(char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_str_alloc(size_t size);
 char	*ft_strdup(const char *s1);
-int		ft_get_line(char *str, int read_b, char **line);
-void	ft_save_str(size_t pos, char *str);
+char	*ft_get_line(char *buff, int size);
+int		ft_endofline(char *buff);
+int		ft_read_line(int fd, char *str, char *buff, char **line);
+int		get_next_line(int fd, char **line);
 
 #	endif
