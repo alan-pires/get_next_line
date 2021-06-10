@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/10 12:58:31 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/10 15:26:32 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,49 +15,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-void	ft_save_str(size_t pos, char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (pos < ft_strlen(str))
-	{
-		str[i] = str[pos + 1];
-		i++;
-		pos++;
-	}
-	str[i] = '\0';
-}
-
-int		ft_get_line(char *str, int read_b, char **line)
-{
-	char	*aux;
-	size_t	i;
-
-	i = 0;
-	aux = ft_str_alloc(ft_strlen(str));
-	if (!aux)
-		return (0);
-	if (ft_strlen(str) || read_b != 0)
-	{
-		if (str[0] ==  '\n')
-			aux[0] = '\0';
-		else
-		{
-			while (str[i] && str[i] != '\n')
-			{
-				aux[i] = str[i];
-				i++;
-			}
-			aux[i] = '\0';
-		}
-		*line = aux;
-		ft_save_str(i, str);
-		return (1);
-	}
-	return (0);
-}
-
+/*
 char	*ft_realloc_str(char *str)
 {
 	char	*aux;
@@ -73,6 +31,22 @@ char	*ft_realloc_str(char *str)
 	str = ft_strdup(aux);
 	return (str);	
 }
+
+void	ft_save_str(size_t pos, char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (pos < ft_strlen(str))
+	{
+		str[i] = str[pos + 1];
+		i++;
+		pos++;
+	}
+	str[i] = '\0';
+}
+*/
+
 
 char	*ft_strncat(char *dest, char *src, unsigned int nb)
 {
@@ -93,14 +67,66 @@ char	*ft_strncat(char *dest, char *src, unsigned int nb)
 	return (dest);
 }
 
-int	ft_endofline(char*s)
+ size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
 	i = 0;
 	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*copy;
+	size_t	i;
+
+	i = 0;
+	copy = ft_str_alloc(ft_strlen(s1));
+	if (copy == NULL)
+		return (NULL);
+	while (s1[i])
 	{
-		if (s[i] == '\n')
+		copy[i] = s1[i];
+		i++;
+	}
+	copy[i] = '\0';
+	return (copy);
+}
+
+
+int		ft_get_line(char *buff, int size)
+{
+	int		i;
+	char	*aux;
+
+	i = 0;
+	while (i < size)
+	{
+		aux[i] = buff[i];
+		i++;
+	}
+}
+
+
+
+int	ft_endofline(char *buff)
+{
+	size_t	i;
+	size_t	j;
+	char	*aux;
+
+	i = 0;
+	j = 0;
+	aux = malloc(sizeof(char) * ft_strlen(buff));
+	while (buff[i])
+	{
+		if (buff[i] == '\n')
+		{
+			ft_get_line(buff, i);
+			
+		}
 			return (1);
 		i++;
 	}
@@ -111,9 +137,12 @@ int	ft_start(int fd, char *str, char *buff)
 {
 	int read_b;
 
-	read_b = read(fd, buff, BUFFER_SIZE);
-	// if (read_b < 0)
-	str = ft_strncat(str,buff, BUFFER_SIZE);
+	read_b = 0;
+	while (!ft_endofline(buff))
+		read_b = read(fd, buff, BUFFER_SIZE);
+	if (read_b < 0)
+		return (-1);
+	str = ft_strncat(str, buff, BUFFER_SIZE);
 	return (read_b);
 }
 
@@ -135,6 +164,7 @@ int	get_next_line(int fd, char **line)
 	while (result == 0)
 	{
 		result = ft_start(fd, str, buff);
+
 	}
 	*line = buff;
 	printf("%s\n %d\n", *line, result);
