@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/10 09:06:59 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/10 12:58:31 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int		ft_get_line(char *str, int read_b, char **line)
 		}
 		*line = aux;
 		ft_save_str(i, str);
-		free(aux);
 		return (1);
 	}
 	return (0);
@@ -72,8 +71,26 @@ char	*ft_realloc_str(char *str)
 	if (!str)
 		return (NULL);
 	str = ft_strdup(aux);
-	free(aux);
 	return (str);	
+}
+
+char	*ft_strncat(char *dest, char *src, unsigned int nb)
+{
+	unsigned int	i;
+	unsigned int	j;
+
+	i = 0;
+	j = 0;
+	while (dest[i])
+		i++;
+	while (src[j] && j < nb)
+	{
+		dest[i] = src[j];
+		i++;
+		j++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }
 
 int	ft_endofline(char*s)
@@ -90,28 +107,36 @@ int	ft_endofline(char*s)
 	return (0);
 }
 
+int	ft_start(int fd, char *str, char *buff)
+{
+	int read_b;
+
+	read_b = read(fd, buff, BUFFER_SIZE);
+	// if (read_b < 0)
+	str = ft_strncat(str,buff, BUFFER_SIZE);
+	return (read_b);
+}
+
 int	get_next_line(int fd, char **line)
 {
-	int			read_b;
+	int			result;
 	static char	*str;
 	char		*buff;
 
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	str = NULL;
-	buff = ft_str_alloc(BUFFER_SIZE);
-	str = ft_str_alloc(BUFFER_SIZE);
+	result = 0;
+	buff = malloc(BUFFER_SIZE);
+	str = malloc(BUFFER_SIZE);
 	if (!buff || !str)
 		return (-1);
-	while ((read_b = read(fd, buff, BUFFER_SIZE)) > 0)
+	
+	while (result == 0)
 	{
-		str = ft_realloc_str(str);
-		str = ft_strjoin(str, buff);
-		if (ft_endofline(buff))
-			break ;
+		result = ft_start(fd, str, buff);
 	}
-	free(buff);
-	if (ft_get_line(str, read_b, line))
-		return (1);
+	*line = buff;
+	printf("%s\n %d\n", *line, result);
 	return (0);
 }
