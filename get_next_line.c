@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/10 15:26:32 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/10 15:46:39 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,21 +95,28 @@ char	*ft_strdup(const char *s1)
 	return (copy);
 }
 
-
 int		ft_get_line(char *buff, int size)
 {
 	int		i;
 	char	*aux;
 
 	i = 0;
+	aux = malloc(size + 1);
+	if (!aux)
+		return(-1);
 	while (i < size)
 	{
 		aux[i] = buff[i];
 		i++;
 	}
+	aux[i] = '\0';
+	free(buff);
+	buff = malloc(ft_strlen(aux));
+	if (!buff)
+		return(-1);
+	buff = ft_strdup(aux);
+	return (1);
 }
-
-
 
 int	ft_endofline(char *buff)
 {
@@ -119,15 +126,13 @@ int	ft_endofline(char *buff)
 
 	i = 0;
 	j = 0;
-	aux = malloc(sizeof(char) * ft_strlen(buff));
 	while (buff[i])
 	{
 		if (buff[i] == '\n')
 		{
 			ft_get_line(buff, i);
-			
-		}
 			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -164,7 +169,7 @@ int	get_next_line(int fd, char **line)
 	while (result == 0)
 	{
 		result = ft_start(fd, str, buff);
-
+		printf("%s\n",buff);
 	}
 	*line = buff;
 	printf("%s\n %d\n", *line, result);
