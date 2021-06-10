@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/09 17:25:16 by apires-d          #+#    #+#             */
+/*   Updated: 2021/06/10 09:13:26 by apires-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
  #include "get_next_line.h"
 
  size_t	ft_strlen(const char *s)
@@ -58,20 +70,19 @@ char	*ft_strdup(const char *s1)
 	return (copy);
 }
 
-/*
- char	*ft_getline(char *s)
+char	*ft_str_alloc(size_t size)
 {
+	char	*memory;
 	size_t	i;
-	size_t	j;
-	char	*str;
 
 	i = 0;
-	j = 0;
-	str = malloc(ft_strlen(s));
-	while (s[i] != '\n')
+	memory = malloc(size);
+	if (memory == NULL)
+		return (NULL);
+	while (i < size + 1)
 	{
-		str[i] = s[i];
+		memory[i] = '\0';
 		i++;
 	}
-	return (str);
-}*/
+	return (memory);
+}
