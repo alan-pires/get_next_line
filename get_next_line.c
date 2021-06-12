@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/12 12:22:46 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/12 12:52:15 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,24 @@ void	ft_get_line(char *str, char *line)
 		i++;
 	if (str[i] == '\n')
 	{
-		if ( i == BUFFER_SIZE && ft_strlen(str) <= BUFFER_SIZE)
+		if (ft_strlen(str) <= BUFFER_SIZE) // \n no final batendo com o tamanho do buffer
+			line = str;
+		else // \n antes de chegar no tamanho do buffer, guardar o que vem depois
+		{
+			aux = malloc(i + 1);
+			if (!aux)
+				return (NULL);
+			while (j < i)
+				aux[j++] = str[i++];
+			aux[j] = '\0';
+			line = aux;
+			ft_save_str(str, i);
+		}
+		printf("%s\n",line);
+	}
+	else
+	{
+		if (ft_strlen(str) <= BUFFER_SIZE)
 			line = str;
 		else
 		{
@@ -110,7 +127,7 @@ void	ft_get_line(char *str, char *line)
 			ft_save_str(str, i);
 		}
 	}
-
+	printf("%s\n",line);
 }
 
 void	ft_mount_line(char *str, char *buff)
