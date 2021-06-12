@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/12 09:16:31 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/12 12:22:46 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,30 +65,80 @@ char	*ft_strdup(const char *s1)
 	return (copy);
 }
 
-char	*ft_get_line(char *str, char *line)
+void	ft_save_str(char *str, size_t size)
+{
+	char	*aux;
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	len = (ft_strlen(str) - size) + 1;
+	aux = malloc(len);
+	if (!aux)
+		return (NULL);
+	while (i < len)
+		aux[i++] = str[size++];
+	aux[i] = '\0';
+	free(str);
+	str = malloc(len);
+	str = ft_strdup(aux);
+}
+
+void	ft_get_line(char *str, char *line)
 {
 	size_t	i;
 	size_t	j;
+	char	*aux;
 
 	i = 0;
 	j = 0;
 	while (str[i] && str[i] != '\n' && i < BUFFER_SIZE)
 		i++;
-	
+	if (str[i] == '\n')
+	{
+		if ( i == BUFFER_SIZE && ft_strlen(str) <= BUFFER_SIZE)
+			line = str;
+		else
+		{
+			aux = malloc(i + 1);
+			if (!aux)
+				return (NULL);
+			while (j < i)
+				aux[j++] = str[i++];
+			aux[j] = '\0';
+			line = aux;
+			ft_save_str(str, i);
+		}
+	}
+
 }
 
 void	ft_mount_line(char *str, char *buff)
 {
 	char	*aux;
+	size_t	len;
 
 	if (str != NULL || str == "")
 	{
-		aux = malloc(ft_strlen(str) + ft_strlen(buff) + 1);
-		aux = ft_strncat(str, buff, ft_strlen(aux));
+		len = ft_strlen(str) + ft_strlen(buff) + 1;
+		aux = malloc(len);
+		if (!aux)
+			return (NULL);
+		aux = ft_strncat(str, buff, len);
 		free(str);
-		str = malloc(ft_strlen(aux));
+		str = malloc(len);
+		if (!str)
+			return (NULL);
 		str = ft_strdup(aux);
 		free(aux);
+	}
+	else
+	{
+		len = ft_strlen(buff + 1);
+		str = malloc(len);
+		if (!str)
+			return (NULL);
+		str = ft_strdup(buff);
 	}
 }
 
