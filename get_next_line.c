@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/10 16:42:52 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/12 09:16:31 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 # include <unistd.h>
 # include <stdlib.h>
-# define BUFFER_SIZE 15
+# define BUFFER_SIZE 8
 
 char	*ft_strncat(char *dest, char *src, unsigned int nb)
 {
@@ -65,70 +65,71 @@ char	*ft_strdup(const char *s1)
 	return (copy);
 }
 
-char	*ft_get_line(char *buff, int size)
+char	*ft_get_line(char *str, char *line)
 {
-	int		i;
-	char	*aux;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
-	aux = malloc(size + 1);
-	if (!aux)
-		return(NULL);
-	while (i < size)
-	{
-		aux[i] = buff[i];
+	j = 0;
+	while (str[i] && str[i] != '\n' && i < BUFFER_SIZE)
 		i++;
+	
+}
+
+void	ft_mount_line(char *str, char *buff)
+{
+	char	*aux;
+
+	if (str != NULL || str == "")
+	{
+		aux = malloc(ft_strlen(str) + ft_strlen(buff) + 1);
+		aux = ft_strncat(str, buff, ft_strlen(aux));
+		free(str);
+		str = malloc(ft_strlen(aux));
+		str = ft_strdup(aux);
+		free(aux);
 	}
-	aux[i] = '\0';
-	free(buff);
-	buff = malloc(ft_strlen(aux));
-	if (!buff)
-		return(NULL);
-	buff = ft_strdup(aux);
-	return (buff);
 }
 
 int	ft_read_line(int fd, char *str, char *buff, char **line)
 {
-	int		read_b;
+	ssize_t		read_b;
 	size_t	i;
 
-	i = -1;
+	i = 0;
+
 	read_b = read(fd, buff, BUFFER_SIZE);
+	// verificar se str esta vazio, se tiver otimo, se nao tiver, concatenar com buff
+	ft_mount_line(str, buff);
+	// ver se tem \n na linha concatenada, se tiver pegar parte que vai ate antes disso
+	ft_get_line(str, line);
+
+	printf("%s\n",buff);
 	if (read_b < 0)
 		return (-1);
-	while (buff[++i])
-	{
-		if (buff[i] == '\n')
-		{
-			buff = ft_get_line(buff, i);
-			break ;
-		}
-	}
-	*line = buff;
-	str = ft_strncat(str, buff, BUFFER_SIZE);
+		
+	//*line = buff;
+	//str = ft_strncat(str, buff, BUFFER_SIZE);
 	return (read_b);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	int			result;
-	static char	*str;
+	ssize_t		result;
 	char		*buff;
+	static char	*str;
 
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	str = NULL;
-	result = 0;
-	buff = malloc(BUFFER_SIZE);
-	str = malloc(BUFFER_SIZE);
+	buff = malloc(BUFFER_SIZE + 1);
+	buff[BUFFER_SIZE] = '\0';
 	if (!buff || !str)
 		return (-1);
-	while (result == 0)
-	{
-		result = ft_read_line(fd, str, buff, line);
-	}
-	printf("%s\n", *line);
-	printf("após strncat: %s\n", str);
-	return (0);
+	result = ft_read_line(fd, str, buff, line);
+	if (result < 0)
+		return (-1);
+	//if result = 0 return 0
+	return (1);
 }
