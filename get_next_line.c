@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/13 16:16:43 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/13 16:33:09 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ char	*ft_strdup(const char *s1)
 	size_t	i;
 
 	i = 0;
-	copy = malloc(ft_strlen(s1));
+	if (!s1)
+		return (NULL);
+	copy = malloc((ft_strlen(s1) + 1) * sizeof(*copy));
 	if (copy == NULL)
 		return (NULL);
 	while (s1[i])
@@ -214,13 +216,18 @@ int	get_next_line(int fd, char **line)
 
 	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (-1);
-	//restart...
-	buff = malloc(BUFFER_SIZE + 1);
+	if (!content[fd])
+	{
+		content[fd] = ft_strdup("");
+		if (!content[fd])
+			return (-1);
+	}
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
 	if (!buff)
 		return (-1);
-	r_bytes = ft_read_line(fd, str, buff, line);
-	if (r_bytes < 0)
-		return (-1);
-	//if r_bytes = 0 return 0
-	return (1);
+	while (read(fd, buff, BUFFER_SIZE) > 0)
+	{
+
+	}
+	return ();
 }
