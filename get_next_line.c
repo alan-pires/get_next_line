@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/12 12:52:15 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/13 16:16:43 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,27 @@
 #include <stdlib.h>
 # include <unistd.h>
 # include <stdlib.h>
-# define BUFFER_SIZE 8
+# ifndef BUFFER_SIZE
+# define BUFFER_SIZE 9
+# endif
+
+char	*ft_calloc(size_t count, size_t size)
+{
+	size_t	i;
+	char	*p;
+
+	i = 0;
+	p = malloc(count * size);
+	if (!p)
+		return (NULL);
+	while (i < (count * size))
+	{
+		*p = '\0';
+		p++;
+		i++;
+	}
+	return (p);
+}
 
 char	*ft_strncat(char *dest, char *src, unsigned int nb)
 {
@@ -65,7 +85,7 @@ char	*ft_strdup(const char *s1)
 	return (copy);
 }
 
-void	ft_save_str(char *str, size_t size)
+int	ft_save_str(char *str, size_t size)
 {
 	char	*aux;
 	size_t	i;
@@ -75,16 +95,17 @@ void	ft_save_str(char *str, size_t size)
 	len = (ft_strlen(str) - size) + 1;
 	aux = malloc(len);
 	if (!aux)
-		return (NULL);
+		return (0);
 	while (i < len)
 		aux[i++] = str[size++];
 	aux[i] = '\0';
 	free(str);
 	str = malloc(len);
 	str = ft_strdup(aux);
+	return (1);
 }
 
-void	ft_get_line(char *str, char *line)
+int	ft_get_line(char *str, char **line)
 {
 	size_t	i;
 	size_t	j;
@@ -96,56 +117,65 @@ void	ft_get_line(char *str, char *line)
 		i++;
 	if (str[i] == '\n')
 	{
-		if (ft_strlen(str) <= BUFFER_SIZE) // \n no final batendo com o tamanho do buffer
-			line = str;
-		else // \n antes de chegar no tamanho do buffer, guardar o que vem depois
-		{
-			aux = malloc(i + 1);
-			if (!aux)
-				return (NULL);
-			while (j < i)
-				aux[j++] = str[i++];
-			aux[j] = '\0';
-			line = aux;
-			ft_save_str(str, i);
-		}
-		printf("%s\n",line);
-	}
-	else
-	{
 		if (ft_strlen(str) <= BUFFER_SIZE)
-			line = str;
+		{
+			*line = str;
+			//printf("%s\n", aux);
+		}
 		else
 		{
 			aux = malloc(i + 1);
 			if (!aux)
-				return (NULL);
+				return (0);
 			while (j < i)
 				aux[j++] = str[i++];
 			aux[j] = '\0';
-			line = aux;
+			*line = aux;
+			//printf("%s\n", aux);
 			ft_save_str(str, i);
 		}
 	}
-	printf("%s\n",line);
+	else
+	{
+		if (ft_strlen(str) <= BUFFER_SIZE)
+		{
+			*line = str;
+			//printf("%s\n", aux);
+		}
+		else
+		{
+			aux = malloc(i + 1);
+			if (!aux)
+				return (0);
+			while (j < i)
+				aux[j++] = str[i++];
+			aux[j] = '\0';
+			*line = aux;
+			//printf("%s\n",*line);
+			ft_save_str(str, i);
+		}
+	}
+	return (1);
 }
 
-void	ft_mount_line(char *str, char *buff)
+int	ft_mount_line(char *str, char *buff)
 {
 	char	*aux;
 	size_t	len;
 
-	if (str != NULL || str == "")
+	if (str != NULL && str != "")
 	{
 		len = ft_strlen(str) + ft_strlen(buff) + 1;
 		aux = malloc(len);
 		if (!aux)
-			return (NULL);
+			return (0);
+		//printf("%s\n", buff);
 		aux = ft_strncat(str, buff, len);
+		
 		free(str);
 		str = malloc(len);
 		if (!str)
-			return (NULL);
+			return (0);
 		str = ft_strdup(aux);
 		free(aux);
 	}
@@ -154,49 +184,43 @@ void	ft_mount_line(char *str, char *buff)
 		len = ft_strlen(buff + 1);
 		str = malloc(len);
 		if (!str)
-			return (NULL);
+			return (0);
 		str = ft_strdup(buff);
 	}
+	return (1);
 }
 
-int	ft_read_line(int fd, char *str, char *buff, char **line)
+ssize_t	ft_read_line(int fd, char *str, char *buff, char **line)
 {
 	ssize_t		read_b;
-	size_t	i;
-
-	i = 0;
 
 	read_b = read(fd, buff, BUFFER_SIZE);
+	printf("%s\n",buff);
 	// verificar se str esta vazio, se tiver otimo, se nao tiver, concatenar com buff
 	ft_mount_line(str, buff);
 	// ver se tem \n na linha concatenada, se tiver pegar parte que vai ate antes disso
-	ft_get_line(str, line);
-
-	printf("%s\n",buff);
+	//ft_get_line(str, line);
 	if (read_b < 0)
 		return (-1);
-		
-	//*line = buff;
-	//str = ft_strncat(str, buff, BUFFER_SIZE);
 	return (read_b);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	ssize_t		result;
+	ssize_t		r_bytes;
 	char		*buff;
-	static char	*str;
+	char		*aux;
+	static char	*content[1024];
 
-	if (fd < 0 || !line || BUFFER_SIZE <= 0)
+	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (-1);
-	str = NULL;
+	//restart...
 	buff = malloc(BUFFER_SIZE + 1);
-	buff[BUFFER_SIZE] = '\0';
-	if (!buff || !str)
+	if (!buff)
 		return (-1);
-	result = ft_read_line(fd, str, buff, line);
-	if (result < 0)
+	r_bytes = ft_read_line(fd, str, buff, line);
+	if (r_bytes < 0)
 		return (-1);
-	//if result = 0 return 0
+	//if r_bytes = 0 return 0
 	return (1);
 }

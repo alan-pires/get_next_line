@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
+
 int main()
 {
     char *linha;
@@ -11,11 +12,7 @@ int main()
 
     fd = open("teste.txt", O_RDONLY);
 	get_next_line(fd, &linha);
-	get_next_line(fd, &linha);
-	get_next_line(fd, &linha);
-	get_next_line(fd, &linha);
-	get_next_line(fd, &linha);
-	// printf("%s\n",linha);
+
 
     free(linha);
 }
