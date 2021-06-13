@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 10:32:26 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/12 14:24:30 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/13 19:26:41 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 # define GET_NEXT_LINE_H
 # include <unistd.h>
 # include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
+# ifndef BUFFER_SIZE
+# define BUFFER_SIZE 9
+# endif
 
 char	*ft_strncat(char *dest, char *src, unsigned int nb);
 size_t	ft_strlen(const char *s);
