@@ -6,13 +6,13 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:16 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/13 19:27:29 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/13 19:38:58 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
@@ -22,7 +22,7 @@ static size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-static char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*p;
 	size_t	len;
@@ -51,7 +51,7 @@ static char	*ft_strjoin(char const *s1, char const *s2)
 	return (p);
 }
 
-static char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1)
 {
 	char	*copy;
 	size_t	i;
@@ -71,7 +71,7 @@ static char	*ft_strdup(const char *s1)
 	return (copy);
 }
 
-static char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
 	size_t	i;
 	char	match;
@@ -87,4 +87,13 @@ static char	*ft_strchr(const char *s, int c)
 	if (s[i] == match)
 		return ((char *)s + i);
 	return (NULL);
+}
+
+void	ft_free(char **p)
+{
+	if (*p)
+	{
+		free(*p);
+		*p = NULL;
+	}
 }

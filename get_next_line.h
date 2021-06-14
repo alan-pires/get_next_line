@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 10:32:26 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/13 19:26:41 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/13 19:36:36 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ char	*ft_strdup(const char *s1);
 int		t_get_line(char *str, char **line);
 ssize_t	ft_read_line(int fd, char *str, char *buff, char **line);
 int		get_next_line(int fd, char **line);
+int		ft_get_line(char **line, int r_bytes, char **content);
 
 #	endif

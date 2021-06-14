@@ -6,24 +6,44 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/13 19:26:41 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/14 08:53:16 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	ft_free(char **p)
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	if (*p)
+	size_t	i;
+	char	*substr;
+
+	if (s == NULL)
+		return (NULL);
+	if (start > ft_strlen(s))
+		i = 1;
+	else if (start + len > ft_strlen(s))
+		i = ft_strlen(s) - start + 1;
+	else
+		i = len + 1;
+	substr = (char *)malloc((i + 1) *sizeof(char));
+	if (substr == NULL)
+		return (NULL);
+	if (i > 1)
 	{
-		free(*p);
-		*p = NULL;
+		i = 0;
+		while (i < len && s[start + i] != '\0')
+		{
+			substr[i] = s[start + i];
+			i++;
+		}
 	}
+	substr[i] = '\0';
+	return (substr);
 }
 
-int	ft_initialize(int *fd, char **line, char *buff, char *content[])
+static int	ft_initialize(int *fd, char **line, char *buff, char *content[])
 {
-
 	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (-1);
 	if (!content[*fd])
@@ -35,6 +55,34 @@ int	ft_initialize(int *fd, char **line, char *buff, char *content[])
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
 	if (!buff)
 		return (-1);
+	return (0);
+}
+
+static int	ft_get_line(char **line, int r_bytes, char **content)
+{
+	size_t	i;
+	char	*aux;
+
+	i = 0;
+	if (r_bytes < 0)
+		return (-1);
+	else if (*content[0] == '\0' && r_bytes == 0)
+	{
+		*line = ft_strdup("");
+		ft_free(content);
+		return (0);
+	}
+	while ((*content)[i] != '\0' && (*content)[i] != '\n')
+		i++;
+	*line = ft_substr(*content, 0, i);
+	if ((*content)[i] == "\n")
+	{
+		aux = ft_strdup(*content + i + 1);
+		free(*content);
+		*content = aux;
+		return (1);
+	}
+	ft_free(content);
 	return (0);
 }
 
@@ -58,7 +106,7 @@ int		get_next_line(int fd, char **line)
 			break ;
 	}
 	free(buff);
-	ret = get_line(line, r_bytes, &(content[fd]));
+	ret = ft_get_line(line, r_bytes, &(content[fd]));
 	return (ret);
 }
 
