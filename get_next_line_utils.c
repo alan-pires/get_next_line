@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:16 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/13 19:38:58 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/14 12:44:25 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,27 @@ size_t	ft_strlen(const char *s)
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*p;
-	size_t	len;
+	size_t	len_s1;
+	size_t	len_s2;
 	size_t	i;
 
 	if (!s1 || !s2)
 		return (NULL);
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
 	i = 0;
-	len = ft_strlen((char *)s1) + ft_strlen((char *)s2);
-	p = (char *)malloc((len + 1) * sizeof(*p));
+	p = (char *)malloc((len_s1 + len_s2 + 1) * sizeof(*p));
 	if (p == NULL)
 		return (NULL);
-	while (*s1)
+	while (s1[i])
 	{
-		p[i] = *s1;
+		p[i] = s1[i];
 		i++;
-		s1++;
 	}
-	while (*s2)
-	{
-		p[i] = *s2;
-		i++;
-		s2++;
-	}
-	p[i] = '\0';
+	i = 0;
+	while (s2[i])
+		p[len_s1++] = s2[i++];
+	p[len_s1] = '\0';
 	return (p);
 }
 
@@ -89,11 +87,23 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-void	ft_free(char **p)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	if (*p)
+	size_t	i;
+	size_t	slen;
+	char	*substr;
+
+	if (!s)
+		return (NULL);
+	i = 0;
+	slen = ft_strlen(s);
+	if (!(substr = malloc((len + 1) * sizeof(*substr))))
+		return (NULL);
+	while ((i < len) && (start + i) < slen)
 	{
-		free(*p);
-		*p = NULL;
+		substr[i] = s[start + i];
+		i++;
 	}
+	substr[i] = '\0';
+	return (substr);
 }
