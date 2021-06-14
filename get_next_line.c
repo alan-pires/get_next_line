@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/14 16:23:11 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/14 20:39:56 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	ft_free(char **p)
 {
-	if (*p)
+	if (*p && p)
 	{
 		free(*p);
 		*p = NULL;
@@ -23,7 +23,7 @@ static void	ft_free(char **p)
 
 static int	ft_get_line(char **line, int r_bytes, char **content)
 {
-	size_t	i;
+	int		i;
 	char	*aux;
 
 	i = 0;
@@ -60,24 +60,29 @@ static int	ft_init_content(char **content)
 	return (0);
 }
 
+ssize_t	ft_read(int *fd, char *buff, ssize_t *r)
+{
+	*r = read(*fd, buff, BUFFER_SIZE);
+	return (*r);
+}
+
 int	get_next_line(int fd, char **line)
 {
-	ssize_t		r_bytes;
 	char		*buff;
 	char		*aux;
 	static char	*content[1024];
+	ssize_t		r_bytes;
 
-	buff = NULL;
+	r_bytes = 0;
+	if (fd < 0 || !line || BUFFER_SIZE < 1)
+		return (-1);
 	if (ft_init_content(&(content[fd])) != 0)
 		return (-1);
-	if (fd < 0 || !line || BUFFER_SIZE < 1)
-		return (0);
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
 	if (!buff)
-		return (0);
-	while (read(fd, buff, BUFFER_SIZE) > 0)
+		return (-1);
+	while (ft_read(&fd, buff, &r_bytes) > 0)
 	{
-		r_bytes = ft_strlen(buff);
 		buff[r_bytes] = '\0';
 		aux = ft_strjoin(content[fd], buff);
 		ft_free(&content[fd]);

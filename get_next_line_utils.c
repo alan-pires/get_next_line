@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:16 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/14 12:44:25 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/14 20:42:49 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 		i++;
 	return (i);
@@ -34,7 +36,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	len_s1 = ft_strlen(s1);
 	len_s2 = ft_strlen(s2);
 	i = 0;
-	p = (char *)malloc((len_s1 + len_s2 + 1) * sizeof(*p));
+	p = (char *)malloc((len_s1 + len_s2 + 1) * sizeof(char));
 	if (p == NULL)
 		return (NULL);
 	while (s1[i])
@@ -54,17 +56,14 @@ char	*ft_strdup(const char *s1)
 	char	*copy;
 	size_t	i;
 
-	i = 0;
+	i = -1;
 	if (!s1)
 		return (NULL);
-	copy = malloc((ft_strlen(s1) + 1) * sizeof(*copy));
+	copy = malloc((ft_strlen(s1) + 1) * sizeof(char));
 	if (copy == NULL)
 		return (NULL);
-	while (s1[i])
-	{
+	while (s1[++i])
 		copy[i] = s1[i];
-		i++;
-	}
 	copy[i] = '\0';
 	return (copy);
 }
@@ -75,7 +74,7 @@ char	*ft_strchr(const char *s, int c)
 	char	match;
 
 	i = 0;
-	match = (unsigned char)c;
+	match = (char)c;
 	while (s[i])
 	{
 		if (s[i] == match)
@@ -89,21 +88,22 @@ char	*ft_strchr(const char *s, int c)
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
+	char	*subs;
 	size_t	i;
-	size_t	slen;
-	char	*substr;
+	size_t	si_len;
 
 	if (!s)
 		return (NULL);
 	i = 0;
-	slen = ft_strlen(s);
-	if (!(substr = malloc((len + 1) * sizeof(*substr))))
+	si_len = ft_strlen(s);
+	subs = malloc((len + 1) * sizeof(char));
+	if (!subs)
 		return (NULL);
-	while ((i < len) && (start + i) < slen)
+	while ((i < len) && (start + i) < si_len)
 	{
-		substr[i] = s[start + i];
+		subs[i] = s[start + i];
 		i++;
 	}
-	substr[i] = '\0';
-	return (substr);
+	subs[i] = '\0';
+	return (subs);
 }
