@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/14 13:05:03 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/14 15:02:07 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,13 @@ static int	ft_get_line(char **line, int r_bytes, char **content)
 	return (0);
 }
 /*
-static int	ft_initialize(int fd, char **line, char **buff, char **content)
+static int	ft_initialize(int fd, char **line, char **buff)
 {
-	printf("chegou aqui 0");
 	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (0);
-	//printf("content[fd]: %s\n", *content);
-	printf("chegou aqui 1");
-	if (!content[fd])
-	{
-		content[fd] = ft_strdup("");
-		if (!content[fd])
-			return (0);
-	}
-	printf("chegou aqui 2");
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
 	if (!buff)
 		return (0);
-	printf("chegou aqui 3");
 	return (1);
 }
 */
@@ -79,24 +68,19 @@ int		get_next_line(int fd, char **line)
 	static char	*content[1024];
 
 	buff = NULL;
-	// if (ft_initialize(fd, line, &buff, &content[fd]) == 0)
+	// if (ft_initialize(fd, line, &buff) == 0)
 	// 	return (-1);
-	
-	if (fd < 0 || !line || BUFFER_SIZE < 1)
-		return (-1);
 	if (!(content[fd]))
 	{
-		content[fd] = ft_strdup("teste");
+		content[fd] = ft_strdup("");
 		if (!(content[fd]))
 			return (-1);
 	}
-	printf("*content[fd]: %d\n",*content[fd]);
-	printf("content[fd]: %s\n", content[fd]);
-	printf("&content[fd]: %s\n", *&content[fd]);
+	if (fd < 0 || !line || BUFFER_SIZE < 1)
+		return (0);
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
 	if (!buff)
-		return (-1);
-	
+		return (0);
 	while (read(fd, buff, BUFFER_SIZE) > 0)
 	{
 		r_bytes = ft_strlen(buff);
