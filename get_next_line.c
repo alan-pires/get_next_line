@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/14 15:02:07 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/14 16:23:11 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,34 +48,28 @@ static int	ft_get_line(char **line, int r_bytes, char **content)
 	ft_free(content);
 	return (0);
 }
-/*
-static int	ft_initialize(int fd, char **line, char **buff)
+
+static int	ft_init_content(char **content)
 {
-	if (fd < 0 || !line || BUFFER_SIZE < 1)
-		return (0);
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
-	if (!buff)
-		return (0);
-	return (1);
+	if (!(*content))
+	{
+		*content = ft_strdup("");
+		if (!(*content))
+			return (-1);
+	}
+	return (0);
 }
-*/
-int		get_next_line(int fd, char **line)
+
+int	get_next_line(int fd, char **line)
 {
 	ssize_t		r_bytes;
-	int			ret;
 	char		*buff;
 	char		*aux;
 	static char	*content[1024];
 
 	buff = NULL;
-	// if (ft_initialize(fd, line, &buff) == 0)
-	// 	return (-1);
-	if (!(content[fd]))
-	{
-		content[fd] = ft_strdup("");
-		if (!(content[fd]))
-			return (-1);
-	}
+	if (ft_init_content(&(content[fd])) != 0)
+		return (-1);
 	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (0);
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
@@ -92,6 +86,5 @@ int		get_next_line(int fd, char **line)
 			break ;
 	}
 	free(buff);
-	ret = ft_get_line(line, r_bytes, &(content[fd]));
-	return (ret);
+	return (ft_get_line(line, r_bytes, &(content[fd])));
 }
