@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/14 20:39:56 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/14 22:32:57 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	get_next_line(int fd, char **line)
 		return (-1);
 	if (ft_init_content(&(content[fd])) != 0)
 		return (-1);
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(*buff));
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
 		return (-1);
 	while (ft_read(&fd, buff, &r_bytes) > 0)
