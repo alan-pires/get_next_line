@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/15 10:44:32 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/15 12:40:32 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	get_next_line(int fd, char **line)
 {
 	char		*buff;
 	char		*aux;
-	static char	*content[1024];
+	static char	*content[RLIMIT_NOFILE];
 	ssize_t		r_bytes;
 
 	r_bytes = 0;

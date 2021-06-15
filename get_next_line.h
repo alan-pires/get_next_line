@@ -6,7 +6,7 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 10:32:26 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/14 20:49:03 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/15 12:36:45 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define GET_NEXT_LINE_H
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/resource.h>
 
 int		get_next_line(int fd, char **line);
 size_t	ft_strlen(const char *s);
