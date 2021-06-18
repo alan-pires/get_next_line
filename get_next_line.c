@@ -6,15 +6,17 @@
 /*   By: apires-d <apires-d@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 17:25:08 by apires-d          #+#    #+#             */
-/*   Updated: 2021/06/15 12:40:32 by apires-d         ###   ########.fr       */
+/*   Updated: 2021/06/18 11:31:08 by apires-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TEST */
 
 #include "get_next_line.h"
 
 static void	ft_free(char **p)
 {
-	if (*p && p)
+	if (*p)
 	{
 		free(*p);
 		*p = NULL;
@@ -29,7 +31,7 @@ static int	ft_get_line(char **line, int r_bytes, char **content)
 	i = 0;
 	if (r_bytes < 0)
 		return (-1);
-	else if (*content[0] == '\0' && r_bytes == 0)
+	else if ((*content)[0] == '\0' && r_bytes == 0)
 	{
 		*line = ft_strdup("");
 		ft_free(content);
@@ -60,7 +62,7 @@ static int	ft_init_content(char **content)
 	return (0);
 }
 
-ssize_t	ft_read(int *fd, char *buff, ssize_t *r)
+ssize_t	ft_bytes_read(int *fd, char *buff, ssize_t *r)
 {
 	*r = read(*fd, buff, BUFFER_SIZE);
 	return (*r);
@@ -70,26 +72,26 @@ int	get_next_line(int fd, char **line)
 {
 	char		*buff;
 	char		*aux;
-	static char	*content[RLIMIT_NOFILE];
+	static char	*content;
 	ssize_t		r_bytes;
 
 	r_bytes = 0;
 	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (-1);
-	if (ft_init_content(&(content[fd])) != 0)
+	if (ft_init_content(&content) != 0)
 		return (-1);
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
 		return (-1);
-	while (ft_read(&fd, buff, &r_bytes) > 0)
+	while (ft_bytes_read(&fd, buff, &r_bytes) > 0)
 	{
 		buff[r_bytes] = '\0';
-		aux = ft_strjoin(content[fd], buff);
-		ft_free(&content[fd]);
-		content[fd] = aux;
+		aux = ft_strjoin(content, buff);
+		ft_free(&content);
+		content = aux;
 		if (ft_strchr(buff, '\n'))
 			break ;
 	}
 	free(buff);
-	return (ft_get_line(line, r_bytes, &(content[fd])));
+	return (ft_get_line(line, r_bytes, &content));
 }
